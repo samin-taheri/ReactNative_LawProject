@@ -145,7 +145,7 @@ export default function Clients() {
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
-    <Page title="Clients | CCOFT-HUKUK">
+    <Page title="Clients | MediLaw">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>

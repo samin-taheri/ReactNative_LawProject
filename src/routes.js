@@ -15,9 +15,9 @@ import Folders from './pages/Folders';
 import AccountActivities from './pages/AccountActivities';
 import Tasks from './pages/Tasks';
 import Documents from './pages/Documents';
-import Licenses from './pages/Licenses';
 import CaseStatus from './pages/CaseStatus';
 import Profile from './pages/Profile';
+import ForgetPassword from './pages/ForgetPassword';
 
 // ----------------------------------------------------------------------
 
@@ -49,8 +49,8 @@ export default function Router() {
         { path: '404', element: <NotFound /> },
         { path: '/', element: <Navigate to="/dashboard" /> },
         { path: '*', element: <Navigate to="/404" /> },
-        { path: 'licenses', element: <Licenses /> },
-        { path: 'profile', element: <Profile /> }
+        { path: 'profile', element: <Profile /> },
+        { path: 'forgotPassword', element: <ForgetPassword /> }
       ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }

@@ -100,7 +100,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               bottom: 10
             }}
           >
-            Ccoft Pro
+            MediLaw Pro
           </Button>
         </Stack>
       </Box>

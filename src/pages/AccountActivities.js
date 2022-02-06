@@ -148,7 +148,7 @@ export default function AccountActivities() {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <Page title="Folders | CCOFT-HUKUK">
+    <Page title="Account Activities | MediLaw">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>

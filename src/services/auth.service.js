@@ -33,14 +33,29 @@ class AuthService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  register(cellPhone, titleEn, titleTr, firstName, lastName, password) {
+  register(cellPhone, password, firstName, lastName, titleEn, titleTr) {
     return axios.post(`${API_URL}register`, {
       cellPhone,
-      titleEn,
-      titleTr,
+      password,
       firstName,
       lastName,
-      password
+      titleTr,
+      titleEn
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  approvingUser(cellPhone, smsCode) {
+    return axios.post(`${API_URL}register`, {
+      cellPhone,
+      smsCode
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  ForgetPassword(cellPhone) {
+    return axios.post(`${API_URL}ForgetPassword?cellPhone=${cellPhone}`, {
+      cellPhone
     });
   }
 

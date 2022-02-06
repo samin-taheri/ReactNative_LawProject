@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { set, sub, formatDistanceToNow } from 'date-fns';
 import { Icon } from '@iconify/react';
-import bellFill from '@iconify/icons-eva/bell-fill';
+import bellOutline from '@iconify/icons-eva/bell-outline';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import doneAllFill from '@iconify/icons-eva/done-all-fill';
 // material
@@ -46,7 +46,7 @@ const NOTIFICATIONS = [
   {
     id: faker.datatype.uuid(),
     title: faker.name.findName(),
-    description: 'answered to your comment on the Minimal',
+    description: 'answered to your comment on the MediLaw',
     avatar: mockImgAvatar(2),
     type: 'friend_interactive',
     createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
@@ -203,7 +203,7 @@ export default function NotificationsPopover() {
         }}
       >
         <Badge badgeContent={totalUnRead} color="error">
-          <Icon icon={bellFill} width={20} height={20} />
+          <Icon icon={bellOutline} width={26} height={26} />
         </Badge>
       </IconButton>
 

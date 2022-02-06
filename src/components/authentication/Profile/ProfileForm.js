@@ -18,6 +18,7 @@ import { LoadingButton } from '@mui/lab';
 export default function ProfileForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordAgain, setShowPasswordAgain] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -142,14 +143,14 @@ export default function ProfileForm() {
           <TextField
             fullWidth
             autoComplete="current-password"
-            type={showPassword ? 'text' : 'passwordAgain'}
+            type={showPassword ? 'text' : 'password'}
             label="Confirm Password"
             {...getFieldProps('passwordAgain')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                    <Icon icon={showPassword ? eyeOutline : eyeOffOutline} />
+                  <IconButton edge="end" onClick={() => setShowPasswordAgain((prev) => !prev)}>
+                    <Icon icon={showPasswordAgain ? eyeOutline : eyeOffOutline} />
                   </IconButton>
                 </InputAdornment>
               ),

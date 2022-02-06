@@ -41,7 +41,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Register() {
   return (
-    <RootStyle title="Register | CCOFT-HUKUK">
+    <RootStyle title="Register | MediLaw">
       <AuthLayout>
         Already have an account? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/login">
@@ -61,9 +61,7 @@ export default function Register() {
             <Typography variant="h4" gutterBottom>
               Get started
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-              Free forever. No credit card needed.
-            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>Sign in for free.</Typography>
           </Box>
 
           <RegisterForm />

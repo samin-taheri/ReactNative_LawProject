@@ -9,7 +9,7 @@ import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
 import { LoginForm } from '../components/authentication/login';
 import AuthSocial from '../components/authentication/AuthSocial';
-
+import { ForgetPasswordForm } from '../components/authentication/ForgetPassword';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -39,19 +39,16 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function ForgetPassword() {
   return (
-    <RootStyle title="Login | MediLaw">
+    <RootStyle title="Forgot Password | MediLaw">
       <AuthLayout>
-        Don’t have an account? &nbsp;
-        <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
-          Get started
-        </Link>
+        <Link underline="none" variant="subtitle2" component={RouterLink} to="/register" />
       </AuthLayout>
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <img src="/static/illustrations/log.jpg" alt="login" />
+          <img src="/static/illustrations/forg.png" alt="login" />
         </SectionStyle>
       </MHidden>
 
@@ -59,12 +56,11 @@ export default function Login() {
         <ContentStyle>
           <Stack sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Sign in to MediLaw
+              Forgot Password?
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
           </Stack>
 
-          <LoginForm />
+          <ForgetPasswordForm />
 
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>

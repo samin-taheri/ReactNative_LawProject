@@ -118,7 +118,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Case Status | CCOFT-HUKUK">
+    <Page title="Case Status | MediLaw">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>

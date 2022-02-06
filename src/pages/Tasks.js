@@ -146,7 +146,7 @@ export default function Tasks() {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <Page title="Folders | CCOFT-HUKUK">
+    <Page title="Tasks | MediLaw">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>

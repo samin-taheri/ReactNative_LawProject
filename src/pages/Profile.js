@@ -40,7 +40,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Profile() {
   return (
-    <RootStyle title="Profile | CCOFT-HUKUK">
+    <RootStyle title="Profile | MediLaw">
       <AuthLayout>
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register" />
       </AuthLayout>

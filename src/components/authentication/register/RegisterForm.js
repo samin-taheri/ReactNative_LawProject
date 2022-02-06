@@ -10,7 +10,17 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import SubtitlesOutlinedIcon from '@mui/icons-material/SubtitlesOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
+import {
+  Stack,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Modal,
+  Box,
+  Typography,
+  Button
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import authService from '../../../services/auth.service';
 
@@ -19,6 +29,11 @@ import authService from '../../../services/auth.service';
 export default function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [showPasswordAgain, setShowPasswordAgain] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -39,7 +54,7 @@ export default function RegisterForm() {
       title: '',
       phone: '',
       password: '',
-      passwordAgain: ''
+      passordAgain: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
@@ -53,6 +68,26 @@ export default function RegisterForm() {
         )
         .then((response) => {
           console.log(response.data.Message);
+          setMessage(response.data.Message);
+          // navigate('/dashboard', { replace: true });
+          // { Licences: response.data.Data, User: formik.values }
+        })
+        .catch((errorResponse) => {
+          console.log('errorResponse');
+          console.log(errorResponse.response);
+        });
+    }
+  });
+  const formikConfirm = useFormik({
+    initialValues: {
+      phoneConfirm: '',
+      SMSCode: ''
+    },
+    onSubmit: () => {
+      authService
+        .approvingUser(formik.values.phone, formik.values.SMSCode)
+        .then((response) => {
+          console.log(response.data.Message);
           // navigate('/dashboard', { replace: true });
           // { Licences: response.data.Data, User: formik.values }
         })
@@ -64,6 +99,7 @@ export default function RegisterForm() {
   });
 
   const { errors, touched, handleSubmit, getFieldProps } = formik;
+  const { handleSubmitConfirm, getFieldPropsConfirm } = formikConfirm;
 
   return (
     <FormikProvider value={formik}>
@@ -159,14 +195,14 @@ export default function RegisterForm() {
           <TextField
             fullWidth
             autoComplete="current-password"
-            type={showPassword ? 'text' : 'passwordAgain'}
+            type={showPassword ? 'text' : 'password'}
             label="Confirm Password"
             {...getFieldProps('passwordAgain')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                    <Icon icon={showPassword ? eyeOutline : eyeOffOutline} />
+                  <IconButton edge="end" onClick={() => setShowPasswordAgain((prev) => !prev)}>
+                    <Icon icon={showPasswordAgain ? eyeOutline : eyeOffOutline} />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -180,9 +216,86 @@ export default function RegisterForm() {
             helperText={touched.passwordAgain && errors.passwordAgain}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={false}>
+          <LoadingButton
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            onClick={handleOpen}
+            loading={false}
+          >
             Sign Up!
           </LoadingButton>
+          <FormikProvider value={formikConfirm}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmitConfirm}>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #fff',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2
+                  }}
+                >
+                  <Stack spacing={2.5}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                      {message}
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      type="phone"
+                      label="Cell phone"
+                      {...getFieldProps('phoneConfirm')}
+                      error={Boolean(touched.phone && errors.phone)}
+                      helperText={touched.phone && errors.phone}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneOutlinedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      type="number"
+                      label="SMS Code"
+                      {...getFieldProps('SMSCode')}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <TextsmsOutlinedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                      error={Boolean(touched.password && errors.password)}
+                      helperText={touched.password && errors.password}
+                    />
+                    <Button
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      loading={false}
+                    >
+                      Confirm!
+                    </Button>
+                  </Stack>
+                </Box>
+              </Modal>
+            </Form>
+          </FormikProvider>
         </Stack>
       </Form>
     </FormikProvider>
