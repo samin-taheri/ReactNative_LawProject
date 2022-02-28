@@ -9,8 +9,6 @@ import Page from '../components/Page';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  const [events, setEvents] = useState([]);
-
   return (
     <Page title="Dashboard | MediLaw">
       <Container maxWidth="xl">

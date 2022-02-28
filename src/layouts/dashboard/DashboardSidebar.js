@@ -5,13 +5,14 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
 // components
+import { Icon } from '@iconify/react';
+import archiveOutline from '@iconify/icons-eva/archive-outline';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 //
 import sidebarConfig from './SidebarConfig';
-import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
 
@@ -63,17 +64,17 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none" component={RouterLink} to="/login">
+        <Link underline="none" component={RouterLink} to="/dashboard/licences">
           <AccountStyle>
+            <Icon icon={archiveOutline} width={23} height={23} />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                Licences
               </Typography>
             </Box>
           </AccountStyle>
         </Link>
       </Box>
-
       <NavSection navConfig={sidebarConfig} />
 
       <Box sx={{ flexGrow: 1 }} />

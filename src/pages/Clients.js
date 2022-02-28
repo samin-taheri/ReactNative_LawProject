@@ -149,7 +149,7 @@ export default function Clients() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>
-            Case Status
+            Clients
           </Typography>
           <Button
             variant="contained"

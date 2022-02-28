@@ -59,7 +59,6 @@ export default function Searchbar() {
             <Icon icon={searchFill} width={20} height={20} />
           </IconButton>
         )}
-
         <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
           <SearchbarStyle>
             <Input

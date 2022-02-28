@@ -6,16 +6,7 @@ import settings2Fill from '@iconify/icons-eva/settings-2-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { alpha } from '@mui/material/styles';
-import {
-  Button,
-  Box,
-  Divider,
-  MenuItem,
-  Typography,
-  Avatar,
-  IconButton,
-  Badge
-} from '@mui/material';
+import { Button, Box, Divider, MenuItem, Typography, IconButton } from '@mui/material';
 // components
 import personOutline from '@iconify/icons-eva/person-outline';
 import bellOutline from '@iconify/icons-eva/bell-outline';

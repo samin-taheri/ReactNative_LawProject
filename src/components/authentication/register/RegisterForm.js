@@ -85,7 +85,7 @@ export default function RegisterForm() {
     },
     onSubmit: () => {
       authService
-        .approvingUser(formik.values.phone, formik.values.SMSCode)
+        .approvingUser(formik.values.phoneConfirm, formik.values.SMSCode)
         .then((response) => {
           console.log(response.data.Message);
           // navigate('/dashboard', { replace: true });
@@ -226,76 +226,66 @@ export default function RegisterForm() {
           >
             Sign Up!
           </LoadingButton>
-          <FormikProvider value={formikConfirm}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmitConfirm}>
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    border: '2px solid #fff',
-                    boxShadow: 24,
-                    p: 4,
-                    borderRadius: 2
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #fff',
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2
+              }}
+            >
+              <Stack spacing={2.5}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  {message}
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="phone"
+                  label="Cell phone"
+                  {...getFieldProps('phoneConfirm')}
+                  error={Boolean(touched.phone && errors.phone)}
+                  helperText={touched.phone && errors.phone}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PhoneOutlinedIcon />
+                      </InputAdornment>
+                    )
                   }}
-                >
-                  <Stack spacing={2.5}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      {message}
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      type="phone"
-                      label="Cell phone"
-                      {...getFieldProps('phoneConfirm')}
-                      error={Boolean(touched.phone && errors.phone)}
-                      helperText={touched.phone && errors.phone}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PhoneOutlinedIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <TextField
-                      fullWidth
-                      type="number"
-                      label="SMS Code"
-                      {...getFieldProps('SMSCode')}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <TextsmsOutlinedIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                      error={Boolean(touched.password && errors.password)}
-                      helperText={touched.password && errors.password}
-                    />
-                    <Button
-                      fullWidth
-                      size="large"
-                      type="submit"
-                      variant="contained"
-                      loading={false}
-                    >
-                      Confirm!
-                    </Button>
-                  </Stack>
-                </Box>
-              </Modal>
-            </Form>
-          </FormikProvider>
+                />
+                <TextField
+                  fullWidth
+                  type="number"
+                  label="SMS Code"
+                  {...getFieldProps('SMSCode')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <TextsmsOutlinedIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                  error={Boolean(touched.password && errors.password)}
+                  helperText={touched.password && errors.password}
+                />
+                <Button fullWidth size="large" type="submit" variant="contained" loading={false}>
+                  Confirm!
+                </Button>
+              </Stack>
+            </Box>
+          </Modal>
         </Stack>
       </Form>
     </FormikProvider>

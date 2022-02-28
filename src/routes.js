@@ -18,6 +18,7 @@ import Documents from './pages/Documents';
 import CaseStatus from './pages/CaseStatus';
 import Profile from './pages/Profile';
 import ForgetPassword from './pages/ForgetPassword';
+import Licences from './pages/Licences';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,8 @@ export default function Router() {
         { path: 'accountActivities', element: <AccountActivities /> },
         { path: 'tasks', element: <Tasks /> },
         { path: 'documents', element: <Documents /> },
-        { path: 'caseStatus', element: <CaseStatus /> }
+        { path: 'caseStatus', element: <CaseStatus /> },
+        { path: 'licences', element: <Licences /> }
       ]
     },
     {
