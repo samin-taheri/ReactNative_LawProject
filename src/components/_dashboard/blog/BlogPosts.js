@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // material
-import { Icon, MenuItem, TextField } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

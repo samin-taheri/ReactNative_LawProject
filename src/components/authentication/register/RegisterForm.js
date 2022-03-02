@@ -1,16 +1,16 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeOutline from '@iconify/icons-eva/eye-outline';
 import eyeOffOutline from '@iconify/icons-eva/eye-off-outline';
-import { useNavigate } from 'react-router-dom';
 // material
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import SubtitlesOutlinedIcon from '@mui/icons-material/SubtitlesOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
+
 import {
   Stack,
   TextField,
@@ -21,19 +21,79 @@ import {
   Typography,
   Button
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import authService from '../../../services/auth.service';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
+import { LoadingButton } from '@mui/lab';
+import authService from './auth.service';
+import CountryService from './country.service';
+import CityService from './city.service';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState(false);
   const [showPasswordAgain, setShowPasswordAgain] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [openIfUnvalidated, setOpenIfUnvalidated] = useState(false);
+  const [unValidateMessage, setUnValidateMessage] = useState('');
+
+  const [valueR, setValueR] = useState('');
+  const [cityValue, setCityValue] = useState(0);
+  const [isCountrySelected, setIsCountrySelected] = useState(false);
   const handleClose = () => setOpen(false);
+
+  const handleCloseValid = () => setOpenIfUnvalidated(false);
+
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  const handleChange = (event) => {
+    setValueR(event.target.value);
+    setIsCountrySelected(true);
+    const cityService = new CityService();
+    cityService
+      .getAll(event.target.value)
+      .then((result) => {
+        const citiesFromApi = result.data.Data;
+        const list2 = [];
+        // eslint-disable-next-line no-restricted-syntax,guard-for-in
+        citiesFromApi.forEach((item) => {
+          list2.push({
+            value: item.CityId,
+            label: item.CityName,
+            key: item.CityName
+          });
+        });
+        setCities(list2);
+      })
+      .catch((errors) => {});
+  };
+
+  const handleCitiesChange = (event) => {
+    setCityValue(event.target.value);
+  };
+  useEffect(() => {
+    const countryService = new CountryService();
+    countryService
+      .getAll()
+      .then((result) => {
+        setCountries(result.data.Data);
+
+        const countriesFromApi = result.data.Data;
+        const list = [];
+        // eslint-disable-next-line no-restricted-syntax,guard-for-in
+        countriesFromApi.forEach((item) => {
+          list.push({
+            value: item.CountryId,
+            label: item.CountryName,
+            key: item.CountryName
+          });
+        });
+        setCountries(list);
+      })
+      .catch((errors) => {});
+  }, []);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -54,30 +114,47 @@ export default function RegisterForm() {
       title: '',
       phone: '',
       password: '',
-      passordAgain: ''
+      passwordAgain: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
+      if (formik.values.password !== formik.values.passwordAgain) {
+        setOpenIfUnvalidated(true);
+        setUnValidateMessage('Password and Confirm password have to be same!');
+      }
       authService
         .register(
+          formik.values.phone,
+          formik.values.password,
           formik.values.firstName,
           formik.values.lastName,
           formik.values.title,
-          formik.values.phone,
-          formik.values.password
+          cityValue
         )
-        .then((response) => {
-          console.log(response.data.Message);
-          setMessage(response.data.Message);
-          // navigate('/dashboard', { replace: true });
-          // { Licences: response.data.Data, User: formik.values }
-        })
+        .then(
+          (response) => {
+            // if response is 200 (Ok)
+            console.log('response');
+            console.log(response.data);
+            // setMessage(response.data.Message);
+            // navigate('/dashboard', { replace: true });
+            // { Licences: response.data.Data, User: formik.values }
+          },
+          (error) => {
+            // if response is 400 (BadRequest)
+          }
+        )
         .catch((errorResponse) => {
-          console.log('errorResponse');
-          console.log(errorResponse.response);
+          // valiodation && authorization && authentication &&  universal web api error
+          setOpenIfUnvalidated(true);
+          setUnValidateMessage(errorResponse.response.data.Message);
+
+          // setOpenIfUnvalidated(true);
+          // setUnValidateMessage(errorResponse.response.Message);
         });
     }
   });
+
   const formikConfirm = useFormik({
     initialValues: {
       phoneConfirm: '',
@@ -93,13 +170,12 @@ export default function RegisterForm() {
         })
         .catch((errorResponse) => {
           console.log('errorResponse');
-          console.log(errorResponse.response);
+          console.log(errorResponse);
         });
     }
   });
 
   const { errors, touched, handleSubmit, getFieldProps } = formik;
-  const { handleSubmitConfirm, getFieldPropsConfirm } = formikConfirm;
 
   return (
     <FormikProvider value={formik}>
@@ -167,6 +243,46 @@ export default function RegisterForm() {
               )
             }}
           />
+          {/* <BlogPosts options={countries} onSort={handleChange} /> */}
+          {countries.length > 0 ? (
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel>Country</InputLabel>
+                <Select
+                  value={valueR}
+                  key={Math.random().toString(36).substr(2, 9)}
+                  label="Select Country"
+                  onChange={handleChange}
+                >
+                  {countries.map((item) => (
+                    <MenuItem key={Math.random().toString(36).substr(2, 9)} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          ) : null}
+
+          {cities.length > 0 && isCountrySelected ? (
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel>City</InputLabel>
+                <Select
+                  value={cityValue}
+                  key={Math.random().toString(36).substr(2, 9)}
+                  label="Select City"
+                  onChange={handleCitiesChange}
+                >
+                  {cities.map((item) => (
+                    <MenuItem key={Math.random().toString(36).substr(2, 9)} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          ) : null}
 
           <TextField
             fullWidth
@@ -216,16 +332,38 @@ export default function RegisterForm() {
             helperText={touched.passwordAgain && errors.passwordAgain}
           />
 
-          <LoadingButton
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            onClick={handleOpen}
-            loading={false}
-          >
+          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={false}>
             Sign Up!
           </LoadingButton>
+
+          <Modal
+            open={openIfUnvalidated}
+            onClose={handleCloseValid}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #fff',
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2
+              }}
+            >
+              <Stack spacing={2.5}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  {unValidateMessage}
+                </Typography>
+              </Stack>
+            </Box>
+          </Modal>
+
           <Modal
             open={open}
             onClose={handleClose}
@@ -248,7 +386,7 @@ export default function RegisterForm() {
             >
               <Stack spacing={2.5}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  {message}
+                  rjeyjtk
                 </Typography>
                 <TextField
                   fullWidth
