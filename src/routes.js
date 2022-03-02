@@ -19,6 +19,9 @@ import CaseStatus from './pages/CaseStatus';
 import Profile from './pages/Profile';
 import ForgetPassword from './pages/ForgetPassword';
 import Licences from './pages/Licences';
+import ApproveUser from './pages/ApproveUser';
+import LicencesList from './pages/LicencesList';
+import ChangePassword from './pages/ChangePassword';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +42,8 @@ export default function Router() {
         { path: 'tasks', element: <Tasks /> },
         { path: 'documents', element: <Documents /> },
         { path: 'caseStatus', element: <CaseStatus /> },
-        { path: 'licences', element: <Licences /> }
+        { path: 'licences', element: <Licences /> },
+        { path: 'licencesList', element: <LicencesList /> }
       ]
     },
     {
@@ -48,6 +52,8 @@ export default function Router() {
       children: [
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
+        { path: 'approveUser', element: <ApproveUser /> },
+        { path: 'changePassword', element: <ChangePassword /> },
         { path: '404', element: <NotFound /> },
         { path: '/', element: <Navigate to="/dashboard" /> },
         { path: '*', element: <Navigate to="/404" /> },

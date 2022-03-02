@@ -25,15 +25,13 @@ import {
   TextField,
   InputAdornment
 } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterDateFns';
 // components
-import roundDashboard from '@iconify/icons-ic/round-dashboard';
 import { useFormik } from 'formik';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import { UserListHead } from '../components/_dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
 import { FolderPosts } from '../components/_dashboard/blog';
@@ -91,7 +89,6 @@ export default function Folders() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -120,7 +117,7 @@ export default function Folders() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy));
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -131,8 +128,7 @@ export default function Folders() {
       remember: true
     }
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-  const [startDate, setStartDate] = useState(new Date());
+  const { getFieldProps } = formik;
 
   return (
     <Page title="Folders | MediLaw">
@@ -306,8 +302,7 @@ export default function Folders() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, name, role, status } = row;
 
                       return (
                         <TableRow hover key={id} tabIndex={-1}>
@@ -352,7 +347,7 @@ export default function Folders() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <SearchNotFound />
                       </TableCell>
                     </TableRow>
                   </TableBody>

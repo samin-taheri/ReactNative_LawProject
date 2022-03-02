@@ -1,14 +1,12 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import 'react-datepicker/dist/react-datepicker.css';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import saveOutline from '@iconify/icons-eva/save-outline';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import baselineCreditScore from '@iconify/icons-ic/baseline-credit-score';
 import roundUpdate from '@iconify/icons-ic/round-update';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -27,15 +25,13 @@ import {
   TextField,
   InputAdornment
 } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterDateFns';
 // components
-import roundDashboard from '@iconify/icons-ic/round-dashboard';
 import { useFormik } from 'formik';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import { UserListHead } from '../components/_dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
 import { FolderPosts } from '../components/_dashboard/blog';
@@ -48,16 +44,6 @@ const TABLE_HEAD = [
   { id: 'role', label: 'Status(EN)', alignRight: false },
   { id: 'isVerified', label: 'Status', alignRight: false },
   { id: '' }
-];
-const Court = [
-  { value: 'All', label: 'All' },
-  { value: 'Case', label: 'Case' },
-  { value: 'Executive', label: 'Executive' }
-];
-const Status = [
-  { value: 'All', label: 'All' },
-  { value: 'Active', label: 'Active' },
-  { value: 'Passive', label: 'Passive' }
 ];
 const Client = [
   { value: 'All', label: 'Suer' },
@@ -103,7 +89,6 @@ export default function Documents() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -132,7 +117,7 @@ export default function Documents() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy));
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -143,8 +128,7 @@ export default function Documents() {
       remember: true
     }
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-  const [startDate, setStartDate] = useState(new Date());
+  const { getFieldProps } = formik;
 
   return (
     <Page title="Documents | MediLaw">
@@ -292,8 +276,7 @@ export default function Documents() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, name, role, status } = row;
 
                       return (
                         <TableRow hover key={id} tabIndex={-1}>
@@ -338,7 +321,7 @@ export default function Documents() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <SearchNotFound />
                       </TableCell>
                     </TableRow>
                   </TableBody>

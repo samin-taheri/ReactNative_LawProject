@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
+// eslint-disable-next-line prettier/prettier
 import axios from 'axios';
-import { Global } from '../Global';
+import {Global} from "../Global";
 
 const URL = `${Global.API_URL}Countries/`;
 

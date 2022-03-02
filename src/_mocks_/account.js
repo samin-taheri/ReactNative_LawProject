@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------
 
 const account = {
-  displayName: 'Samin Taheri',
-  email: 'samin@gmail.com',
+  displayName: 'Name Surname',
+  email: 'email@mail.com',
   photoURL: '/static/mock-images/avatars/avatar.png'
 };
 

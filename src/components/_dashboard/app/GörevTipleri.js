@@ -5,7 +5,6 @@ import baselineTask from '@iconify/icons-ic/baseline-task';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography, Link } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -34,8 +33,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const TOTAL = 714000;
 
 export default function GörevTipleri() {
   return (

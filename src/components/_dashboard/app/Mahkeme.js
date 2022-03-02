@@ -4,9 +4,6 @@ import baselineGavel from '@iconify/icons-ic/baseline-gavel';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography, Link } from '@mui/material';
-// utils
-import { fShortenNumber } from '../../../utils/formatNumber';
-
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -34,8 +31,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const TOTAL = 234;
 
 export default function Mahkeme() {
   return (

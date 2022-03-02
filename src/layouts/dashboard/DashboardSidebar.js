@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Link, Button, Drawer, Typography, Stack } from '@mui/material';
 // components
 import { Icon } from '@iconify/react';
 import archiveOutline from '@iconify/icons-eva/archive-outline';
@@ -64,7 +64,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none" component={RouterLink} to="/dashboard/licences">
+        <Link underline="none" component={RouterLink} to="/dashboard/licencesList">
           <AccountStyle>
             <Icon icon={archiveOutline} width={23} height={23} />
             <Box sx={{ ml: 2 }}>

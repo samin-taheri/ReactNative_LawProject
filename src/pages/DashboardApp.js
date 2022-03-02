@@ -2,13 +2,13 @@
 import { Box, Grid, Container, Typography } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 // components
-import { useState } from 'react';
 import { EVENTS } from './events';
 import Page from '../components/Page';
-
-// ----------------------------------------------------------------------
+import { app } from '../Global';
 
 export default function DashboardApp() {
+  console.log(app.item.UserId);
+
   return (
     <Page title="Dashboard | MediLaw">
       <Container maxWidth="xl">

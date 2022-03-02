@@ -5,8 +5,6 @@ import roundCases from '@iconify/icons-ic/round-cases';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography, Link } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
-
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -34,8 +32,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const TOTAL = 714000;
 
 export default function DosyaDurumu() {
   return (

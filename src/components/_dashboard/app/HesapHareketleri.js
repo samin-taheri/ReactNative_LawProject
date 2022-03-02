@@ -4,9 +4,6 @@ import baselineAccountBalance from '@iconify/icons-ic/baseline-account-balance';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography, Link } from '@mui/material';
-// utils
-import { fShortenNumber } from '../../../utils/formatNumber';
-
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -34,8 +31,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const TOTAL = 1723315;
 
 export default function HesapHareketleri() {
   return (

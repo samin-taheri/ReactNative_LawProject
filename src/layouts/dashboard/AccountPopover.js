@@ -9,7 +9,6 @@ import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, IconButton } from '@mui/material';
 // components
 import personOutline from '@iconify/icons-eva/person-outline';
-import bellOutline from '@iconify/icons-eva/bell-outline';
 import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';

@@ -9,7 +9,6 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import SubtitlesOutlinedIcon from '@mui/icons-material/SubtitlesOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
-import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 
 import {
   Stack,
@@ -27,9 +26,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import { LoadingButton } from '@mui/lab';
-import authService from './auth.service';
-import CountryService from './country.service';
-import CityService from './city.service';
+import { useNavigate } from 'react-router-dom';
+import { app } from '../../../Global';
+import authService from '../../../services/auth.service';
+import CountryService from '../../../services/country.service';
+import CityService from '../../../services/city.service';
+
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
@@ -37,14 +39,21 @@ export default function RegisterForm() {
   const [showPasswordAgain, setShowPasswordAgain] = useState(false);
   const [open, setOpen] = useState(false);
   const [openIfUnvalidated, setOpenIfUnvalidated] = useState(false);
+  const [openIfExists, setOpenIfExists] = useState(false);
+  const [OpenIfValidated, setOpenIfValidated] = useState(false);
   const [unValidateMessage, setUnValidateMessage] = useState('');
+  const [ExistsMessage, setExistsMessage] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+  const [phoneForConfirm, setPhoneForConfirm] = useState('');
+  const [SMSForConfirm, setSMSForConfirm] = useState('');
+  const navigate = useNavigate();
 
   const [valueR, setValueR] = useState('');
   const [cityValue, setCityValue] = useState(0);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
-  const handleClose = () => setOpen(false);
 
   const handleCloseValid = () => setOpenIfUnvalidated(false);
+  const handleCloseExists = () => setOpenIfExists(false);
 
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
@@ -67,7 +76,9 @@ export default function RegisterForm() {
         });
         setCities(list2);
       })
-      .catch((errors) => {});
+      .catch((errors) => {
+        console.log(errors);
+      });
   };
 
   const handleCitiesChange = (event) => {
@@ -92,7 +103,9 @@ export default function RegisterForm() {
         });
         setCountries(list);
       })
-      .catch((errors) => {});
+      .catch((errors) => {
+        console.log(errors);
+      });
   }, []);
 
   const RegisterSchema = Yup.object().shape({
@@ -104,7 +117,9 @@ export default function RegisterForm() {
     title: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Title is required'),
     phone: Yup.string().required('Cell phone is required'),
     password: Yup.string().required('Password is required'),
-    passwordAgain: Yup.string().required('Password confirmation is required')
+    passwordAgain: Yup.string().required('Password confirmation is required'),
+    country: Yup.string().required('Country confirmation is required'),
+    city: Yup.string().required('City confirmation is required')
   });
 
   const formik = useFormik({
@@ -114,72 +129,72 @@ export default function RegisterForm() {
       title: '',
       phone: '',
       password: '',
-      passwordAgain: ''
+      passwordAgain: '',
+      phoneConfirm: '',
+      SMSConfirm: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
       if (formik.values.password !== formik.values.passwordAgain) {
         setOpenIfUnvalidated(true);
-        setUnValidateMessage('Password and Confirm password have to be same!');
+        setUnValidateMessage('Password and confirm password have to match!');
       }
-      authService
-        .register(
-          formik.values.phone,
-          formik.values.password,
-          formik.values.firstName,
-          formik.values.lastName,
-          formik.values.title,
-          cityValue
-        )
-        .then(
-          (response) => {
-            // if response is 200 (Ok)
-            console.log('response');
-            console.log(response.data);
-            // setMessage(response.data.Message);
-            // navigate('/dashboard', { replace: true });
-            // { Licences: response.data.Data, User: formik.values }
-          },
-          (error) => {
-            // if response is 400 (BadRequest)
-          }
-        )
-        .catch((errorResponse) => {
-          // valiodation && authorization && authentication &&  universal web api error
-          setOpenIfUnvalidated(true);
-          setUnValidateMessage(errorResponse.response.data.Message);
-
-          // setOpenIfUnvalidated(true);
-          // setUnValidateMessage(errorResponse.response.Message);
-        });
+      if (app.item.UserId !== null) {
+        setOpenIfExists(true);
+        alert('This account already exists!');
+        navigate('/login');
+      } else {
+        authService
+          .register(
+            formik.values.phone,
+            formik.values.password,
+            formik.values.firstName,
+            formik.values.lastName,
+            formik.values.title,
+            valueR,
+            cityValue
+          )
+          .then(
+            (response) => {
+              // if response is 200 (Ok)
+              alert(response.data.Message);
+              setOpenIfValidated(true);
+              setConfirmMessage(response.data.Message);
+              navigate('/approveUser');
+              // navigate('/dashboard', { replace: true });
+            },
+            (error) => {
+              console.log(error);
+              // if response is 400 (BadRequest)
+            }
+          )
+          .catch((errorResponse) => {
+            // valiodation && authorization && authentication &&  universal web api error
+            setOpenIfExists(true);
+            setExistsMessage(errorResponse.response.data.Message);
+            setOpenIfUnvalidated(true);
+            setUnValidateMessage(errorResponse.response.data.Message);
+          });
+      }
     }
   });
+  const confirmPhone = () => {
+    authService
+      .approvingUser(formik.values.phoneConfirm, formik.values.SMSConfirm)
+      .then((result) => {
+        setPhoneForConfirm(result.data.Data);
+        setSMSForConfirm(result.data.Data);
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
+  };
 
-  const formikConfirm = useFormik({
-    initialValues: {
-      phoneConfirm: '',
-      SMSCode: ''
-    },
-    onSubmit: () => {
-      authService
-        .approvingUser(formik.values.phoneConfirm, formik.values.SMSCode)
-        .then((response) => {
-          console.log(response.data.Message);
-          // navigate('/dashboard', { replace: true });
-          // { Licences: response.data.Data, User: formik.values }
-        })
-        .catch((errorResponse) => {
-          console.log('errorResponse');
-          console.log(errorResponse);
-        });
-    }
-  });
-
-  const { errors, touched, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="on" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
@@ -243,13 +258,16 @@ export default function RegisterForm() {
               )
             }}
           />
-          {/* <BlogPosts options={countries} onSort={handleChange} /> */}
           {countries.length > 0 ? (
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
-                <InputLabel>Country</InputLabel>
+                <InputLabel id="demo-simple-select-label">Country</InputLabel>
                 <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   value={valueR}
+                  error={errors.country}
+                  touched={touched.country}
                   key={Math.random().toString(36).substr(2, 9)}
                   label="Select Country"
                   onChange={handleChange}
@@ -267,9 +285,13 @@ export default function RegisterForm() {
           {cities.length > 0 && isCountrySelected ? (
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
-                <InputLabel>City</InputLabel>
+                <InputLabel id="demo-simple-select-label">City</InputLabel>
                 <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   value={cityValue}
+                  error={errors.city}
+                  touched={touched.city}
                   key={Math.random().toString(36).substr(2, 9)}
                   label="Select City"
                   onChange={handleCitiesChange}
@@ -332,10 +354,15 @@ export default function RegisterForm() {
             helperText={touched.passwordAgain && errors.passwordAgain}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={false}>
+          <LoadingButton
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+          >
             Sign Up!
           </LoadingButton>
-
           <Modal
             open={openIfUnvalidated}
             onClose={handleCloseValid}
@@ -363,10 +390,9 @@ export default function RegisterForm() {
               </Stack>
             </Box>
           </Modal>
-
           <Modal
-            open={open}
-            onClose={handleClose}
+            open={openIfExists}
+            onClose={handleCloseExists}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
@@ -386,41 +412,8 @@ export default function RegisterForm() {
             >
               <Stack spacing={2.5}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  rjeyjtk
+                  {ExistsMessage}
                 </Typography>
-                <TextField
-                  fullWidth
-                  type="phone"
-                  label="Cell phone"
-                  {...getFieldProps('phoneConfirm')}
-                  error={Boolean(touched.phone && errors.phone)}
-                  helperText={touched.phone && errors.phone}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PhoneOutlinedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-                <TextField
-                  fullWidth
-                  type="number"
-                  label="SMS Code"
-                  {...getFieldProps('SMSCode')}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <TextsmsOutlinedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                  error={Boolean(touched.password && errors.password)}
-                  helperText={touched.password && errors.password}
-                />
-                <Button fullWidth size="large" type="submit" variant="contained" loading={false}>
-                  Confirm!
-                </Button>
               </Stack>
             </Box>
           </Modal>

@@ -15,7 +15,8 @@ class AuthService {
     return axios
       .post(`${API_URL}login?licenceId=${licenceId}`, {
         cellPhone,
-        password
+        password,
+        licenceId
       })
       .then((response) => {
         if (response.data.Data.Token) {
@@ -58,9 +59,11 @@ class AuthService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  UpdateUserPassword(cellPhone) {
+  UpdateUserPassword(cellPhone, smsCode, newPassword) {
     return axios.post(`${API_URL}UpdateUserPassword`, {
-      cellPhone
+      cellPhone,
+      smsCode,
+      newPassword
     });
   }
 

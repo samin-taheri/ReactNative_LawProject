@@ -1,7 +1,5 @@
 // material
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Grid, Container, Typography, Link } from '@mui/material';
-import { MHidden } from '../components/@material-extend';
+import { Box, Grid, Container, Typography } from '@mui/material';
 import DosyaDurumu from '../components/_dashboard/app/DosyaDurumu';
 import DosyaTipi from '../components/_dashboard/app/DosyaTipi';
 // eslint-disable-next-line import/no-unresolved
